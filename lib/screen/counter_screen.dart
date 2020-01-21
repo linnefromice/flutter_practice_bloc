@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Demo Home Page'),
+        title: Text('Counter App'),
       ),
       body: Center(
         child: Column(
