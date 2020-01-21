@@ -2,10 +2,10 @@ import 'dart:async';
 
 class CounterBloc {
   final _actionController = StreamController<void>();
-  Sink<void> increment() => _actionController.sink;
+  Sink<void> get increment => _actionController.sink;
 
   final _countController = StreamController<int>();
-  Sink<int> count() => _countController.sink;
+  Stream<int> get count => _countController.stream;
 
   int _count = 0;
 

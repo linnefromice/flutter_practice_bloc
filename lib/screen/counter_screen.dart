@@ -12,37 +12,23 @@ class CounterScreen extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Provider<CounterBloc>(
-        builder: (context) => CounterBloc(),
+        create: (context) => CounterBloc(),
         dispose: (context, bloc) => bloc.dispose(),
-        child: HomePage(title: 'Flutter Demo Home Page'),
+        child: HomePage(),
       ),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final counterBloc = Provider.of<CounterBloc>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Flutter Demo Home Page'),
       ),
       body: Center(
         child: Column(
@@ -51,15 +37,23 @@ class _HomePageState extends State<HomePage> {
             Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
+            StreamBuilder(
+              initialData: 0,
+              stream: counterBloc.count,
+              builder: (context, snapshot) {
+                return Text(
+                  '${snapshot.data}',
+                  style: Theme.of(context).textTheme.display1,
+                );
+              },
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          counterBloc.increment.add(null);
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
