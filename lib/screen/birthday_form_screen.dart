@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice_bloc/blocs/birthday_form_screen.dart';
+import 'package:flutter_practice_bloc/blocs/counter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class BirthdayFormScreen extends StatelessWidget {
@@ -20,6 +21,74 @@ class BirthdayFormScreen extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+
+  Widget _buildInputArea(BirthdayFormBloc bloc) => Row(
+    children: <Widget>[
+      Expanded(
+        flex: 1,
+        child: TextField(
+          decoration: InputDecoration(labelText: 'YEAR'),
+          onChanged: (String value) async {
+            bloc.inputYear.add(value);
+          },
+        ),
+      ),
+      Expanded(
+        flex: 1,
+        child: TextField(
+          decoration: InputDecoration(labelText: 'MONTH'),
+          onChanged: (String value) async {
+            bloc.inputMonth.add(value);
+          },
+        ),
+      ),
+      Expanded(
+        flex: 1,
+        child: TextField(
+          decoration: InputDecoration(labelText: 'DAY'),
+          onChanged: (String value) async {
+            bloc.inputDay.add(value);
+          },
+        ),
+      ),
+    ],
+  );
+
+  Widget _buildDisplayArea(BirthdayFormBloc bloc) => Row(
+    children: <Widget>[
+      Expanded(
+        flex: 1,
+        child: StreamBuilder(
+          initialData: '',
+          stream: bloc.getYear,
+          builder: (context, snapshot) {
+            return Text('${snapshot.data}');
+          },
+        ),
+      ),
+      Expanded(
+        flex: 1,
+        child: StreamBuilder(
+          initialData: '',
+          stream: bloc.getMonth,
+          builder: (context, snapshot) {
+            return Text('${snapshot.data}');
+          },
+        ),
+      ),
+      Expanded(
+        flex: 1,
+        child: StreamBuilder(
+          initialData: '',
+          stream: bloc.getDay,
+          builder: (context, snapshot) {
+            return Text('${snapshot.data}');
+          },
+        ),
+      ),
+    ],
+  );
+
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<BirthdayFormBloc>(context);
@@ -30,73 +99,10 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: TextField(
-                      decoration: InputDecoration(labelText: 'YEAR'),
-                      onChanged: (String value) async {
-                        bloc.inputYear.add(value);
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: TextField(
-                      decoration: InputDecoration(labelText: 'MONTH'),
-                      onChanged: (String value) async {
-                        bloc.inputYear.add(value);
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: TextField(
-                      decoration: InputDecoration(labelText: 'DAY'),
-                      onChanged: (String value) async {
-                        bloc.inputYear.add(value);
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              child: _buildInputArea(bloc)
             ),
             Container(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: StreamBuilder(
-                      initialData: '',
-                      stream: bloc.getYear,
-                      builder: (context, snapshot) {
-                        return Text('${snapshot.data}');
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: StreamBuilder(
-                      initialData: '',
-                      stream: bloc.getMonth,
-                      builder: (context, snapshot) {
-                        return Text('${snapshot.data}');
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: StreamBuilder(
-                      initialData: '',
-                      stream: bloc.getDay,
-                      builder: (context, snapshot) {
-                        return Text('${snapshot.data}');
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              child: _buildDisplayArea(bloc)
             )
           ],
         ),
